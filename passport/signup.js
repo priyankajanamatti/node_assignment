@@ -3,7 +3,7 @@ var User = require('../models/user');
 var bCrypt = require('bcrypt-nodejs');
 var nodeMailer = require('nodemailer');
 var configuration = require("../config");
-var email = require("../utils/mailer");
+// var email = require("../utils/mailer");
 module.exports = function (passport) {
 //     passport.use('signup', new LocalStrategy({
 //             usernameField: 'username',

@@ -14,3 +14,7 @@
 ::1 - - [06/Feb/2020:03:49:27 +0000] "POST /product_category/api/v1/add_category HTTP/1.1" 200 223 "-" "PostmanRuntime/7.1.5"
 ::1 - - [06/Feb/2020:03:49:38 +0000] "POST /product_category/api/v1/add_category HTTP/1.1" 200 224 "-" "PostmanRuntime/7.1.5"
 ::1 - - [06/Feb/2020:03:50:09 +0000] "GET /product_category/api/v1/list_all_categories HTTP/1.1" 200 499 "-" "PostmanRuntime/7.1.5"
+::1 - - [12/Feb/2020:06:23:36 +0000] "POST /product_category/api/v1/add_product HTTP/1.1" 200 264 "-" "PostmanRuntime/7.20.1"
+::1 - - [12/Feb/2020:06:24:17 +0000] "GET /product_category/api/v1/list_products HTTP/1.1" 200 252 "-" "PostmanRuntime/7.20.1"
+::1 - - [12/Feb/2020:06:26:15 +0000] "POST /product_category/api/v1/add_product HTTP/1.1" 200 266 "-" "PostmanRuntime/7.20.1"
+::1 - - [12/Feb/2020:06:26:24 +0000] "GET /product_category/api/v1/list_products HTTP/1.1" 200 438 "-" "PostmanRuntime/7.20.1"

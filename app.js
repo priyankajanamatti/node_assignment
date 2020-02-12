@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-//var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -8,41 +7,25 @@ var fs = require('fs');
 var mongoose = require('mongoose');
 var cors = require('cors');
 var expressJwt = require('express-jwt');
-var jwt = require('jsonwebtoken');
-var csrf = require('csrf');
 var httpProxy = require('http-proxy');
 var flash = require('connect-flash');
 
 var dbConfig = require('./db');
-const fileUpload = require('express-fileupload');
 var app = express();
-//app.use('/images', express.static('images'));
-app.use(fileUpload());
 
-// configuration of environment
+
 app.set('env', "development");
-//app.set('env',"production");
 
 if (app.get('env') === 'development') {
 
-    //create a write stream (in append mode)
     var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
         flags: 'a'
     });
-    //var accessLogStream = fs.createWriteStream('/var/log/origin/access.log',{flags: 'a'});
-
-    // logging options
+    
     morganOptions = {
         stream: accessLogStream
-        // , skip: function (req, res) { return res.statusCode < 400; }  // uncomment this to log errors only
     };
-    // enable logger
     app.use(logger('combined', morganOptions));
-
-    // setup the logger
-    //app.use(logger('combined', {stream: accessLogStream}));
-
-//app.use(express.errorHandler());
 
 }
 
@@ -50,13 +33,11 @@ if (app.get('env') === 'development') {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-//app.use(favicon());
 app.use(logger('dev'));
 
 var expressSession = require('express-session');
 
 var sessionstore = require('sessionstore');
-// TODO - Why Do we need this key ?
 app.use(expressSession({
     store: sessionstore.createSessionStore(),
     secret: '!@product_category@!',
@@ -69,8 +50,6 @@ app.use(expressSession({
     }
 
 }));
-app.use('/images', express.static('images'));//imp for image upload
-//Setting memory body parser
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json({
     limit: '10mb'
@@ -89,7 +68,6 @@ httpProxy.prototype.onError = function (err) {
 var apiProxy = httpProxy.createProxyServer(proxyOptions);
 
 var allowCrossDomain = function (req, res, next) {
-    // console.log(req.body);
     res.header('Access-Control-Allow-Origin', "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header("Access-Control-Allow-Credentials", true);
@@ -115,7 +93,6 @@ d.on('error', function (err, req, res, next) {
     data = {
         email: 'krupalsharmakn@gmail.com'
     };
-    // MongoMail.sendMailMongo(data);
 
 });
 
@@ -124,7 +101,6 @@ d.run(function () {
     console.log("MongoDb connected Successfully !!!");
 });
 
-//Session management in DB
 var MongoStore = require('connect-mongo')(expressSession);
 
 app.use(expressSession({
@@ -135,7 +111,6 @@ app.use(expressSession({
     store: new MongoStore(
         {
             mongooseConnection: mongoose.connection, // it re- use the already connected instance
-            //url: dbConfig.url, //it opens new connection
             autoRemoveExpiredSession: true,
         },
 
@@ -163,20 +138,15 @@ app.use(require('express-domain-middleware'));
 app.use('/', routes);
 app.use('/product_category/api/v1', routesv1);
 
-/// catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
-    //next(err);
     res.status(err.status || 404);
     res.send({
         "code": "404",
         "error": "Not Found"
     });
 });
-
-// development error handler
-// will print stacktrace
 
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
@@ -187,22 +157,14 @@ if (app.get('env') === 'development') {
         }
         console.log(err.message)
         res.status(err.status || 500);
-        //        res.render('error', {
-        //            message: err.message,
-        //            error: err
-        //        });
+       
         res.send({
             "code": "500",
             "error": "Internal Server Error"
         });
     });
 }
-// var cron = require('node-cron');
 
-/*cron.schedule('* * * * *', function(){
-    mailer.sendMail();
-    console.log('running a task every two minutes');
-});*/
 if (app.get('env') === 'production') {
 
     console.log = function () {
